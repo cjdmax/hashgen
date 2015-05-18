@@ -120,13 +120,13 @@
         display: block;
       }
     </style>
-    <link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/base-min.css">
-    <link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="//yui-s.yahooapis.com/pure/0.6.0/base-min.css">
+    <link rel="stylesheet" href="//yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
   </head>
   <body>
     <div class="cd-tabs">
     <h1>Hashgen</h1>
-    <p>Clientside hashing. Libraries from CDN's. No data is sent to the server. Limited entropy. Do not use for important things. No warranties of merchantability or fitness for a particular purpose.</p>
+    <p>Clientside hashing. Libraries from CDN's. No data is sent to the server. No warranties of merchantability or fitness for a particular purpose.</p>
 
     <nav><ul class="cd-tabs-navigation">
       <li><a class="pure-button pure-button-primary" data-content="sha1" class="selected" href="#sha1">SHA1/Base64</a></li>
@@ -146,7 +146,8 @@
         <div class="pure-control-group">
           <label class="field" for="hash">Resulting Hash:</label><input type="text" name="hash" class="pure-input-2-3" id="hash" readonly />
         </div>
-        <tt>echo -n mypassword | openssl dgst -binary -sha1 | openssl base64</tt>
+	<p>Or execute the following on the linux commandline <tt>echo -n mypassword | openssl dgst -binary -sha1 | openssl base64</tt></p>
+	<p>Unsalted SHA1 is not particularly secure; only use for passwords of low importance</p>
       </fieldset>
     </form>
     
