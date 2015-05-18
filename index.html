@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Hashgen</title>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/sjcl/1.0.2/sjcl.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/js-sha1/0.3.0/sha1.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <!--[if lt IE 9 ]>
+    <script>
+    var is_ie_lt9 = true;
+    </script>
+    <![endif]--> 
+    <script>
+      function doHash() { 
+      document.getElementById("hash").setAttribute("value", '{SHA}'+ sjcl.codec.base64.fromBits(sjcl.codec.hex.toBits(sha1(document.getElementById("password").value))));
+      }
+      
+      //function getSalt(len) {
+      //  return sjcl.random.randomWords(ceil(len * 3 / 4 / 4 )) // length in base64 chars, 4 bytes per word
+      //}
+
+      //function doSHA256() {
+      //document.getElementById("hash2").setAttribute("value", sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(document.getElementById("password2").value)));
+      //}
+      
+      jQuery(document).ready(function(){
+        
+        //var buf = crypto.randomBytes(1024/8)
+        //buf = new Uint32Array(new Uint8Array(buf).buffer)
+        //sjcl.random.addEntropy(buf,1024,"crypto.randomBytes")
+        
+        var tabItems = $('.cd-tabs-navigation a'),
+                tabContentWrapper = $('.cd-tabs-content');
+                
+        tabItems.on('click', function(event){
+                event.preventDefault();
+                var selectedItem = $(this);
+                if( !selectedItem.hasClass('selected') ) {
+                        var selectedTab = selectedItem.data('content'),
+                                selectedContent = tabContentWrapper.find('li[data-content="'+selectedTab+'"]'),
+                                selectedContentHeight = selectedContent.innerHeight();
+                        
+                        tabItems.removeClass('selected');
+                        selectedItem.addClass('selected');
+                        selectedContent.addClass('selected').siblings('li').removeClass('selected');
+                        window.location = $(this).attr("href");
+                        //animate tabContentWrapper height when content changes 
+                        tabContentWrapper.animate({
+                                'height': selectedContentHeight
+                        }, 200);
+                }
+        });
+        $('a[href="'+window.location.hash+'"]').trigger("click");
+        if (window.location.hash) {
+          $('.cd-tabs-navigation').hide();
+        }
+      });
+    </script>
+    <style>
+      body { padding: 1em; }
+      .cd-tabs {
+        position: relative;
+        margin: 2em auto;
+      }
+      .cd-tabs:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+      .no-cssgradients .cd-tabs::after {
+        display: none;
+      }
+      .cd-tabs nav {
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        background: #f8f7ee;
+        box-shadow: inset 0 -2px 3px rgba(203, 196, 130, 0.06);
+      }
+      .cd-tabs-navigation:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+      .cd-tabs-navigation li {
+        float: left;
+        list-style-type: none;
+      }
+      .cd-tabs-navigation a {
+        position: relative;
+        display: block;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #c3c2b9;
+      }
+      .cd-tabs-navigation a.selected {
+          box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 1);
+      }
+      .cd-tabs-navigation a::before {
+        /* icons */
+        position: absolute;
+        top: 12px;
+        left: 50%;
+        margin-left: -10px;
+        display: inline-block;
+        height: 20px;
+        width: 20px;
+        background-repeat: no-repeat;
+      }
+      .cd-tabs-navigation a[data-content='sha1']::before {
+        background-position: 0 0;
+      }
+      .cd-tabs-navigation a[data-content='sha256']::before {
+        background-position: -20px 0;
+      }
+      .cd-tabs-content li {
+        display: none;
+        padding: 1.4em;
+      }
+      .cd-tabs-content li.selected {
+        display: block;
+      }
+    </style>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/base-min.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+  </head>
+  <body>
+    <div class="cd-tabs">
+    <h1>Hashgen</h1>
+    <p>Clientside hashing. Libraries from CDN's. No data is sent to the server. Limited entropy. Do not use for important things. No warranties of merchantability or fitness for a particular purpose.</p>
+
+    <nav><ul class="cd-tabs-navigation">
+      <li><a class="pure-button pure-button-primary" data-content="sha1" class="selected" href="#sha1">SHA1/Base64</a></li>
+      <li><a class="pure-button pure-button-primary" data-content="sha256" href="#sha2">SHA256/Base64</a></li>
+    </ul></nav>
+    
+    <ul class="cd-tabs-content">
+      <li data-content="sha1" class="selected">
+    
+    <form class="pure-form pure-form-aligned"><fieldset>
+
+        <legend>SHA1 / Base64</legend>
+
+        <div class="pure-control-group">
+          <label class="field" for="password">Password:</label><input type="password" onInput="doHash()" class="pure-input-2-3" name="password" id="password" autofocus inputmode="verbatim" placeholder="enter a password" />
+        </div>
+        <div class="pure-control-group">
+          <label class="field" for="hash">Resulting Hash:</label><input type="text" name="hash" class="pure-input-2-3" id="hash" readonly />
+        </div>
+        <tt>echo -n mypassword | openssl dgst -binary -sha1 | openssl base64</tt>
+      </fieldset>
+    </form>
+    
+    </li>
+    
+    <li data-content="sha256">
+    
+    <form class="pure-form pure-form-aligned"><fieldset>
+        <legend>SHA-256/ base64</legend>
+          <div class="pure-control-group">
+            <label class="field" for="password2">Password:</label><input type="password" onInput="doSHA256()" class="pure-input-2-3" name="password2" id="password2" inputmode="verbatim" placeholder="enter a password" />
+          </div>
+        <div class="pure-control-group">
+          <label class="field" for="hash2">Resulting Hash:</label><input type="text" name="hash2" class="pure-input-2-3" id="hash2" readonly />
+        </div>
+        </fieldset>
+    </form>
+    
+    </li>
+    </ul>
+  </div>
+  </body>
+</html>
+
