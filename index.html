@@ -20,9 +20,9 @@
       //  return sjcl.random.randomWords(ceil(len * 3 / 4 / 4 )) // length in base64 chars, 4 bytes per word
       //}
 
-      //function doSHA256() {
-      //document.getElementById("hash2").setAttribute("value", sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(document.getElementById("password2").value)));
-      //}
+      function doSHA256() {
+      document.getElementById("hash2").setAttribute("value", sjcl.codec.hex.fromBits(sjcl.hash.sha256.hash(document.getElementById("password2").value)));
+      }
       
       jQuery(document).ready(function(){
         
